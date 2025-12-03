@@ -1,10 +1,47 @@
-import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useRegisterMutation } from "../../shared/queries/auth/use.register.mutation";
+import { RegisterFormData, registerScheme } from "./register.schmea";
+import { useUserStore } from "../../shared/store/user-store";
 
 export const useRegisterViewModel = () => {
-  const [userData, setUserData] = useState({
-    name: "Roberto",
-    token: "sdfasfsaas23664",
+  const userRegisterMutation = useRegisterMutation();
+  const { setSession, user } = useUserStore();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: yupResolver(registerScheme),
+    defaultValues: {
+      name: "teste",
+      email: "testeteste3@gmail.com",
+      password: "123123123",
+      confirmPassword: "123123123",
+      phone: "11111111111",
+    },
   });
 
-  return { userData, setUserData };
+  console.log(user);
+
+  const onSubmit = handleSubmit(async (userData) => {
+    console.log(userData);
+    const { confirmPassword, ...registerData } = userData;
+
+    const mutationResponse = await userRegisterMutation.mutateAsync(
+      registerData
+    );
+    setSession({
+      refreshToken: mutationResponse.refreshToken,
+      token: mutationResponse.token,
+      user: mutationResponse.user,
+    });
+  });
+
+  return {
+    control,
+    errors,
+    onSubmit,
+  };
 };
