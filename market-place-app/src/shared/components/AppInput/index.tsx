@@ -43,8 +43,10 @@ export const AppInput: FC<AppInputProps> = ({
     handleFocus,
     handlePasswordToggle,
     handleWrapperPres,
+    showPassword,
+    handleTextChange,
+    isFocused,
   } = useAppInputViewModel({
-    error,
     onBlur,
     onFocus,
     isError: !!error,
@@ -55,20 +57,50 @@ export const AppInput: FC<AppInputProps> = ({
     value,
   });
 
-  const styles = appInputVariants({});
+  const styles = appInputVariants({
+    isFocused,
+    isDisabled,
+    isError: !!error,
+  });
 
   return (
     <View className={styles.container({ className: containerClassName })}>
-      <Text className={styles.label()}>Label</Text>
+      <Text className={styles.label()}>{label}</Text>
       <Pressable className={styles.wrapper()}>
-        <Ionicons size={22} name="person" />
+        {leftIcon && (
+          <Ionicons
+            color={getIconColor()}
+            className="mr-3"
+            size={22}
+            name={leftIcon}
+          />
+        )}
 
-        <TextInput className={styles.input()} {...textInputProps} />
+        <TextInput
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          className={styles.input()}
+          onChangeText={handleTextChange}
+          value={value}
+          secureTextEntry={showPassword}
+          {...textInputProps}
+        />
 
-        <TouchableOpacity>
-          <Ionicons size={22} name="eye-off-outline" />
-        </TouchableOpacity>
+        {secureTextEntry && (
+          <TouchableOpacity activeOpacity={0.7} onPress={handlePasswordToggle}>
+            <Ionicons
+              size={22}
+              name={showPassword ? "eye-outline" : "eye-off-outline"}
+            />
+          </TouchableOpacity>
+        )}
       </Pressable>
+
+      {error && (
+        <Text className={styles.error()}>
+          <Ionicons name="alert-circle-outline" /> {error}
+        </Text>
+      )}
     </View>
   );
 };

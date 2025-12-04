@@ -5,7 +5,6 @@ import { colors } from "../../../styles/colors";
 interface AppInputViewModelProps {
   isError?: boolean;
   isDisabled?: boolean;
-  error?: string;
   secureTextEntry?: boolean;
   onFocus?: (event: FocusEvent) => void;
   onBlur?: (event: BlurEvent) => void;
@@ -15,7 +14,6 @@ interface AppInputViewModelProps {
 }
 
 export const useAppInputViewModel = ({
-  error,
   isDisabled,
   isError,
   mask,
@@ -25,7 +23,7 @@ export const useAppInputViewModel = ({
   secureTextEntry,
   value,
 }: AppInputViewModelProps) => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(secureTextEntry);
   const [isFocused, setIsFocused] = useState(false);
 
   const inputRef = useRef<TextInput>(null);
@@ -49,10 +47,18 @@ export const useAppInputViewModel = ({
   };
 
   const getIconColor = () => {
-    if (isFocused) return colors["purple-base"];
     if (isError) return colors.danger;
+    if (isFocused) return colors["purple-base"];
     if (value) return colors["purple-base"];
     return colors.grays[200];
+  };
+
+  const handleTextChange = (text: string) => {
+    if (mask) {
+      onChangeText?.(mask(text) || "");
+    } else {
+      onChangeText?.(text);
+    }
   };
 
   return {
@@ -61,5 +67,8 @@ export const useAppInputViewModel = ({
     handleFocus,
     handleWrapperPres,
     handlePasswordToggle,
+    handleTextChange,
+    isFocused,
+    showPassword,
   };
 };
