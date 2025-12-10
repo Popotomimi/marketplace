@@ -10,7 +10,7 @@ export type SelectionVariant = "primary" | "secundary" | "danger";
 
 export interface SelectionOption {
   text: string;
-  onPres: () => void;
+  onPress: () => void;
   icon?: keyof typeof Ionicons.glyphMap;
   variant?: SelectionVariant;
 }
