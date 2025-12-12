@@ -1,14 +1,21 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { CameraType } from "expo-image-picker";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRegisterMutation } from "../../shared/queries/auth/use.register.mutation";
-import { RegisterFormData, registerScheme } from "./register.schmea";
-import { useUserStore } from "../../shared/store/user-store";
 import { useImage } from "../../shared/hooks/useImage";
+import { useRegisterMutation } from "../../shared/queries/auth/use.register.mutation";
+import { useUploadAvatarMutation } from "../../shared/queries/auth/use-upload-avatar.mutation";
+import { useUserStore } from "../../shared/store/user-store";
+import { RegisterFormData, registerScheme } from "./register.schmea";
 
 export const useRegisterViewModel = () => {
-  const userRegisterMutation = useRegisterMutation();
-  const { setSession } = useUserStore();
-  const { handleSelectImage } = useImage({});
+  const { updateUser } = useUserStore();
+  const [avatarUri, setAvatarUri] = useState<string | null>(null);
+
+  const { handleSelectImage } = useImage({
+    callback: setAvatarUri,
+    cameraType: CameraType.front,
+  });
 
   const handleSelectAvatar = async () => {
     await handleSelectImage();
@@ -29,18 +36,24 @@ export const useRegisterViewModel = () => {
     },
   });
 
+  const uploadAvatarMutation = useUploadAvatarMutation();
+
+  const userRegisterMutation = useRegisterMutation({
+    onSuccess: async () => {
+      if (avatarUri) {
+        const { url } = await uploadAvatarMutation.mutateAsync(avatarUri);
+        console.log({ url });
+
+        updateUser({ avatarUrl: url });
+      }
+    },
+  });
+
   const onSubmit = handleSubmit(async (userData) => {
     console.log(userData);
     const { confirmPassword, ...registerData } = userData;
 
-    const mutationResponse = await userRegisterMutation.mutateAsync(
-      registerData
-    );
-    setSession({
-      refreshToken: mutationResponse.refreshToken,
-      token: mutationResponse.token,
-      user: mutationResponse.user,
-    });
+    await userRegisterMutation.mutateAsync(registerData);
   });
 
   return {
@@ -48,5 +61,6 @@ export const useRegisterViewModel = () => {
     errors,
     onSubmit,
     handleSelectAvatar,
+    avatarUri,
   };
 };

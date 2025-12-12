@@ -1,7 +1,8 @@
 import { RegisterHttpParams } from "../interfaces/http/register";
-import { marketPlaceApiClient } from "../api/market-place";
+import { baseURL, marketPlaceApiClient } from "../api/market-place";
 import { AuthResponse } from "../interfaces/http/auth-response";
 import { LoginHttpParams } from "../interfaces/http/login";
+import { uploadAvatarResponse } from "../interfaces/http/upload-avatar";
 
 export const register = async (userData: RegisterHttpParams) => {
   const { data } = await marketPlaceApiClient.post<AuthResponse>(
@@ -17,6 +18,23 @@ export const login = async (userData: LoginHttpParams) => {
     "/auth/login",
     userData
   );
+
+  return data;
+};
+
+export const uploadAvatar = async (avatarUri: string) => {
+  const formData = new FormData();
+
+  formData.append("avatar", {
+    uri: avatarUri,
+    type: "image/jpeg",
+    name: "avatar.jpeg",
+  } as unknown as Blob);
+
+  const { data } = await marketPlaceApiClient.post<uploadAvatarResponse>(
+    "/user/avatar"
+  );
+  data.url = `${baseURL}${data.url}`;
 
   return data;
 };

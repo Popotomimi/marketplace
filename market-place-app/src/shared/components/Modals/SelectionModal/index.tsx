@@ -21,7 +21,7 @@ export const SelectionModal: FC<SelectionModalProps> = ({
       "w-full py-3 px-4 rounded-lg items-center flex-row justify-center mb-2",
       {
         "bg-danger": variant === "danger",
-        "bg-blue-dark": variant === "secundary",
+        "bg-blue-dark": variant === "secondary",
         "bg-purple-base": variant === "primary",
       }
     );
@@ -41,7 +41,7 @@ export const SelectionModal: FC<SelectionModalProps> = ({
       <View className="gap-3">
         {options.map((option, index) => (
           <TouchableOpacity
-            onPress={option.onPres}
+            onPress={option.onPress}
             key={` selection-item-${index} `}
             className={getButtonClass(option.variant ?? "primary")}>
             {option.icon && (

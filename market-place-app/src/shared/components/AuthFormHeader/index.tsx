@@ -18,7 +18,7 @@ export const AuthFormHeader: FC<AuthFormHeaderProps> = ({
         className="w-[80px] h-[60px] mb-8"
       />
       <Text className="text-3xl font-bold mb-3 text-gray-700">{title}</Text>
-      <Text className="text-base text-gray-500">{subTitle}</Text>
+      <Text className="text-base text-gray-500 text-center">{subTitle}</Text>
     </View>
   );
 };
