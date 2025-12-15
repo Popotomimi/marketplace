@@ -1,4 +1,4 @@
-export interface uploadAvatarResponse {
+export interface UploadAvatarResponse {
   message: string;
   filename: string;
   url: string;

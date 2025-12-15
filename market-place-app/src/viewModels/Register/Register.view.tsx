@@ -22,12 +22,13 @@ export const RegisterView: FC<ReturnType<typeof useRegisterViewModel>> = ({
           subTitle="Informe seus dados pessoais e de acesso"
         />
         <TouchableOpacity
-          className="w-[120px] h-[120px] rounded-[12px] items-center justify-center bg-shape self-center mb-8"
+          className="w-[120px] h-[120px] rounded-xl items-center justify-center bg-shape self-center mb-8"
           onPress={handleSelectAvatar}>
           {avatarUri ? (
             <Image
-              className="w-full h-full rounded-[12px]"
               source={{ uri: avatarUri }}
+              className="w-full h-full rounded-xl"
+              resizeMode="cover"
             />
           ) : (
             <Ionicons name="cloud-upload-outline" size={32} />
@@ -82,10 +83,12 @@ export const RegisterView: FC<ReturnType<typeof useRegisterViewModel>> = ({
         </AppButton>
 
         <View className="mt-16">
-          <Text className="text-base mb-6 text-gray-300">
+          <Text className="text-base mb-6 text-gray-500">
             Já tem uma conta?
           </Text>
-          <AppButton variant="outlined" onPress={() => router.push("/login")}>
+          <AppButton
+            variant="outlined"
+            onPress={() => router.push("/(public)/login")}>
             Login
           </AppButton>
         </View>

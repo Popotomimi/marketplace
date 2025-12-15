@@ -16,7 +16,7 @@ export const useGallery = (pickerOptions: ImagePickerOptions) => {
       if (!currentStatus) {
         Alert.alert(
           "Permissão negada!",
-          "Precisamos de sua permissão para acessar sua galeria de fotos",
+          "Precisamos de permissão para acessar sua galeria de fotos",
           [
             {
               text: "Cancelar",

@@ -7,6 +7,10 @@ interface UseRegisterMutationParams {
   onSuccess?: () => void;
 }
 
+interface UseRegisterMutationParams {
+  onSuccess?: () => void;
+}
+
 export const useRegisterMutation = ({
   onSuccess,
 }: UseRegisterMutationParams = {}) => {

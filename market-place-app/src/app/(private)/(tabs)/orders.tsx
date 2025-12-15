@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 
-export default function Home() {
+export default function Ordes() {
   return (
     <View>
-      <Text>Home aqui pai</Text>
+      <Text>Orders</Text>
     </View>
   );
 }

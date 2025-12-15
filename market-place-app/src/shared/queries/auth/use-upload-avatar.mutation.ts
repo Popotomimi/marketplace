@@ -10,7 +10,7 @@ export const useUploadAvatarMutation = () => {
     },
     onError: (error) => {
       console.log(error);
-      Toast.error("Erro ao fazer upload da foto de perfil");
+      Toast.error("Erro ao fazer upload da foto de perfil" + error);
     },
   });
 

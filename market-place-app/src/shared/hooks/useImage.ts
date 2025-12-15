@@ -1,11 +1,11 @@
 import { ImagePickerOptions } from "expo-image-picker";
+import { useModalStore } from "../store/modal-store";
 import { useAppModal } from "./useAppModal";
 import { useCamera } from "./useCamera";
 import { useGallery } from "./useGallery";
-import { useModalStore } from "../store/modal-store";
 
 interface UseImageParams extends ImagePickerOptions {
-  callback: (uri: string | null) => void;
+  callback: (uri: string) => void;
 }
 
 export const useImage = ({ callback, ...pickerOptions }: UseImageParams) => {
@@ -21,7 +21,9 @@ export const useImage = ({ callback, ...pickerOptions }: UseImageParams) => {
 
   const handleCallback = (uri: string | null) => {
     close();
-    callback(uri);
+    if (uri) {
+      callback(uri);
+    }
   };
 
   const handleSelectImage = () => {
