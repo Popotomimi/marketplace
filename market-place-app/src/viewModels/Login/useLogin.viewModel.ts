@@ -19,7 +19,6 @@ export const useLoginViewModel = () => {
 
   const onSubmit = handleSubmit(async (userFormData) => {
     const userData = await loginMutation.mutateAsync(userFormData);
-    console.log(userData);
   });
 
   return { control, onSubmit };
