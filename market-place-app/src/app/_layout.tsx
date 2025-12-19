@@ -1,23 +1,25 @@
-import { Stack } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
 import "../styles/global.css";
-import { AppModal } from "../shared/components/AppModal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ToastManager from "toastify-react-native";
-import { useUserStore } from "../shared/store/user-store";
+import { AppModal } from "../shared/components/AppModal";
+import { AppBottomSheet } from "../shared/components/AppBottomSheet";
 
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  const { token } = useUserStore();
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(public)" />
-        <Stack.Screen name="(private)" />
-      </Stack>
-      <AppModal />
-      <ToastManager useModal={false} />
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(public)" />
+          <Stack.Screen name="(private)" />
+        </Stack>
+        <AppModal />
+        <AppBottomSheet />
+        <ToastManager useModal={false} />
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }

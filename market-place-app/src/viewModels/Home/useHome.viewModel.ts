@@ -8,8 +8,8 @@ export const useHomeViewModel = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
-    isRefetching,
     refetch,
+    isRefetching,
   } = useProductInfiniteQuery();
 
   const handleLoadMore = () => {
@@ -22,7 +22,7 @@ export const useHomeViewModel = () => {
     await refetch();
   };
 
-  const handleEnReached = () => {
+  const handleEndReached = () => {
     handleLoadMore();
   };
 
@@ -30,9 +30,10 @@ export const useHomeViewModel = () => {
     handleLoadMore,
     handleRefresh,
     products,
-    handleEnReached,
+    handleEndReached,
     isLoading,
     hasNextPage,
     isFetchingNextPage,
+    isRefetching,
   };
 };
