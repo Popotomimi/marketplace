@@ -13,7 +13,7 @@ export const getProducts = async (params: ProductRequest) => {
 };
 
 export const getProductsCategories = async () => {
-  const { data } = await marketPlaceApiClient.get<ProductCategory>(
+  const { data } = await marketPlaceApiClient.get<ProductCategory[]>(
     "/products/categories"
   );
 
