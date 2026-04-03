@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../styles/colors";
@@ -8,6 +8,24 @@ import { ProductCard } from "./components/ProductCard";
 import { SearchInput } from "./components/SearchInput";
 import { useHomeViewModel } from "./useHome.viewModel";
 
+const RenderHeader = memo(
+  ({
+    searchInputText,
+    setSearchInputText,
+  }: {
+    searchInputText: string;
+    setSearchInputText: (text: string) => void;
+  }) => (
+    <>
+      <HomeHeader />
+      <SearchInput
+        inputValue={searchInputText}
+        setSearchInputText={setSearchInputText}
+      />
+    </>
+  )
+);
+
 export const HomeView: FC<ReturnType<typeof useHomeViewModel>> = ({
   products,
   handleEndReached,
@@ -16,6 +34,8 @@ export const HomeView: FC<ReturnType<typeof useHomeViewModel>> = ({
   isFetchingNextPage,
   handleRefresh,
   isRefetching,
+  setSearchInputText,
+  searchInputText,
 }) => {
   return (
     <SafeAreaView edges={["top"]} className="flex-1">
@@ -33,12 +53,12 @@ export const HomeView: FC<ReturnType<typeof useHomeViewModel>> = ({
         columnWrapperStyle={{
           justifyContent: "space-between",
         }}
-        ListHeaderComponent={() => (
-          <>
-            <HomeHeader />
-            <SearchInput />
-          </>
-        )}
+        ListHeaderComponent={
+          <RenderHeader
+            setSearchInputText={setSearchInputText}
+            searchInputText={searchInputText}
+          />
+        }
         contentContainerClassName="px-4 pb-[120px]"
         refreshControl={
           <RefreshControl
