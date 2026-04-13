@@ -44,5 +44,7 @@ export const useProductViewModel = (productId: number) => {
     getCommentsLoading,
     getCommentsError,
     comments,
+    isRefetching,
+    isFetchingNextPage,
   };
 };
