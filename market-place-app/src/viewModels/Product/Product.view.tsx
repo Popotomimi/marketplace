@@ -21,6 +21,7 @@ export const ProductView: FC<ReturnType<typeof useProductViewModel>> = ({
   comments,
   isRefetching,
   isFetchingNextPage,
+  handleAddToCart,
 }) => {
   if (error) {
     return <Error />;
@@ -46,7 +47,10 @@ export const ProductView: FC<ReturnType<typeof useProductViewModel>> = ({
         }
         contentContainerClassName="pb-6"
       />
-      <AddToCartFooter product={productDetails} />
+      <AddToCartFooter
+        product={productDetails}
+        handleAddToCart={handleAddToCart}
+      />
     </SafeAreaView>
   );
 };

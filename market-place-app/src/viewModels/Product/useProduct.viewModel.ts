@@ -1,5 +1,10 @@
+import { createElement } from "react";
 import { useGetCommentsInfiniteQuery } from "../../shared/queries/product/use-get-product-comments-infinite.query";
 import { useGetProductDetailQuery } from "../../shared/queries/product/use-get-product-detail";
+import { useCartStore } from "../../shared/store/cart-store";
+import { useModalStore } from "../../shared/store/modal-store";
+import { AddToCartSuccessModal } from "./components/AddToCartSuccessModal";
+import { router } from "expo-router";
 
 export const useProductViewModel = (productId: number) => {
   const {
@@ -19,6 +24,10 @@ export const useProductViewModel = (productId: number) => {
     isFetchingNextPage,
   } = useGetCommentsInfiniteQuery(productId);
 
+  const { addProduct } = useCartStore();
+
+  const { open, close } = useModalStore();
+
   const handleLoadMore = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
@@ -35,6 +44,36 @@ export const useProductViewModel = (productId: number) => {
     handleLoadMore();
   };
 
+  const onGoToCart = () => {
+    router.push("/(private)/(tabs)/cart");
+    close();
+  };
+
+  const onContinueShopping = () => {
+    router.push("/(private)/(tabs)/home");
+    close();
+  };
+
+  const handleAddToCart = () => {
+    if (!productDetails) return;
+
+    addProduct({
+      id: productDetails.id,
+      name: productDetails.name,
+      price: Number(productDetails.value),
+      image: productDetails.photo,
+    });
+
+    open(
+      createElement(AddToCartSuccessModal, {
+        productName: productDetails.name,
+        onGoToCart,
+        onClose: () => close,
+        onContinueShopping,
+      }),
+    );
+  };
+
   return {
     isLoading,
     productDetails,
@@ -46,5 +85,6 @@ export const useProductViewModel = (productId: number) => {
     comments,
     isRefetching,
     isFetchingNextPage,
+    handleAddToCart,
   };
 };
