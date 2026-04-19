@@ -5,6 +5,8 @@ import { useCartStore } from "../../shared/store/cart-store";
 import { useModalStore } from "../../shared/store/modal-store";
 import { AddToCartSuccessModal } from "./components/AddToCartSuccessModal";
 import { router } from "expo-router";
+import { useBottomSheetStore } from "../../shared/store/bottomsheet-store";
+import { ReviewBottomSheet } from "./components/ReviewBottomSheet";
 
 export const useProductViewModel = (productId: number) => {
   const {
@@ -24,9 +26,10 @@ export const useProductViewModel = (productId: number) => {
     isFetchingNextPage,
   } = useGetCommentsInfiniteQuery(productId);
 
-  const { addProduct } = useCartStore();
+  const { addProduct, products } = useCartStore();
 
   const { open, close } = useModalStore();
+  const { open: openBottomSheet } = useBottomSheetStore();
 
   const handleLoadMore = () => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -74,6 +77,15 @@ export const useProductViewModel = (productId: number) => {
     );
   };
 
+  const handleOpenReview = () => {
+    if (!productDetails) return;
+    openBottomSheet({
+      content: createElement(ReviewBottomSheet, {
+        productId,
+      }),
+    });
+  };
+
   return {
     isLoading,
     productDetails,
@@ -86,5 +98,6 @@ export const useProductViewModel = (productId: number) => {
     isRefetching,
     isFetchingNextPage,
     handleAddToCart,
+    handleOpenReview,
   };
 };
