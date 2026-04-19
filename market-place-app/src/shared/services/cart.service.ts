@@ -13,16 +13,26 @@ export const cartService = {
     );
 
     if (existingProduct) {
-      return productList.map((product) => {
+      const products = productList.map((product) => {
         if (product.id === newProduct.id) {
           return { ...product, quantity: product.quantity + 1 };
         } else {
           return product;
         }
       });
+
+      const total = cartService.calculateTotal(products);
+
+      return { products, total };
     }
 
-    return [...productList, { ...newProduct, quantity: 1 }];
+    const products = [...productList, { ...newProduct, quantity: 1 }];
+    const total = cartService.calculateTotal(products);
+
+    return {
+      products: products,
+      total: total,
+    };
   },
 
   calculateTotal: (productList: CartProduct[]) => {
@@ -30,4 +40,46 @@ export const cartService = {
       return acc + Number(product.price) * product.quantity;
     }, 0);
   },
+
+  removeProductFromList: (productList: CartProduct[], productId: number) => {
+    const products = productList.filter(({ id }) => id !== productId);
+    const total = cartService.calculateTotal(products);
+
+    return {
+      products,
+      total,
+    };
+  },
+
+  updateProductQuantity: ({
+    productId,
+    productList,
+    quantity,
+  }: {
+    productId: number;
+    productList: CartProduct[];
+    quantity: number;
+  }) => {
+    if (quantity < 0) {
+      return cartService.removeProductFromList(productList, productId);
+    }
+
+    const products = productList.map((product) => {
+      if (product.id === productId) {
+        return { ...product, quantity: quantity };
+      } else {
+        return product;
+      }
+    });
+
+    const total = cartService.calculateTotal(products);
+
+    return {
+      products,
+      total,
+    };
+  },
+
+  getItemCount: (productList: CartProduct[]) =>
+    productList.reduce((acc, product) => acc + product.quantity, 0),
 };

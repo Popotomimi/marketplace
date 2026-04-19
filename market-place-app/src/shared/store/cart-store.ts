@@ -16,7 +16,7 @@ export type OmittedProductCart = Omit<CartProduct, "quantity">;
 interface CartStore {
   products: CartProduct[];
   total: number;
-  addItem: (product: OmittedProductCart) => void;
+  addProduct: (product: OmittedProductCart) => void;
   removeProduct: (productId: number) => void;
   updateQuantity: (params: { productId: number; quantity: number }) => void;
   clearCart: () => void;
@@ -29,22 +29,24 @@ export const useCartStore = create<CartStore>()(
       products: [],
       total: 0,
 
-      addItem: (newProduct) =>
-        set((state) => {
-          const newItems = cartService.addProductToCart(
-            state.products,
-            newProduct,
-          );
-
-          return {
-            prodts: newItems,
-            total: 1,
-          };
-        }),
+      addProduct: (newProduct) =>
+        set((state) =>
+          cartService.addProductToCart(state.products, newProduct),
+        ),
       clearCart: () => set({ products: [], total: 0 }),
-      getItemCount: () => 0,
-      removeProduct: () => set({}),
-      updateQuantity: () => set({}),
+      getItemCount: () => cartService.getItemCount(get().products),
+      removeProduct: (productId) =>
+        set((state) =>
+          cartService.removeProductFromList(state.products, productId),
+        ),
+      updateQuantity: ({ productId, quantity }) =>
+        set((state) =>
+          cartService.updateProductQuantity({
+            productId,
+            productList: state.products,
+            quantity,
+          }),
+        ),
     }),
     {
       name: "marketplace-cart",
