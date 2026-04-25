@@ -6,6 +6,7 @@ import { colors } from "../../../../styles/colors";
 import { AppInput } from "../../../../shared/components/AppInput";
 import { AppButton } from "../../../../shared/components/AppButton";
 import { Stars } from "./Components/Stars";
+import { useBottomSheetStore } from "../../../../shared/store/bottomsheet-store";
 
 export const ReviewBottomSheetView: FC<
   ReturnType<typeof useReviewBottomSheetViewModel>
@@ -16,6 +17,7 @@ export const ReviewBottomSheetView: FC<
   loadingUserComment,
   handleFormSubmit,
   isLoading,
+  closeBottomSheet,
 }) => {
   return (
     <View className="bg-background rounded-t-2xl">
@@ -25,7 +27,12 @@ export const ReviewBottomSheetView: FC<
         </Text>
 
         <TouchableOpacity className="w-8 h-8 items-center justify-center rounded-[10px] border border-gray-400">
-          <Ionicons size={24} name="close" color={colors.grays[400]} />
+          <Ionicons
+            onPress={closeBottomSheet}
+            size={24}
+            name="close"
+            color={colors.grays[400]}
+          />
         </TouchableOpacity>
       </View>
 
@@ -65,7 +72,9 @@ export const ReviewBottomSheetView: FC<
 
           <View className="flex-row gap-3 mb-8">
             <View className="flex-1">
-              <AppButton variant="outlined">Cancelar</AppButton>
+              <AppButton onPress={closeBottomSheet} variant="outlined">
+                Cancelar
+              </AppButton>
             </View>
             <View className="flex-1">
               <AppButton onPress={handleFormSubmit}>
