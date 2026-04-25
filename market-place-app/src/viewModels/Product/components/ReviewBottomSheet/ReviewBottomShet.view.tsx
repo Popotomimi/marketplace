@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../../styles/colors";
 import { AppInput } from "../../../../shared/components/AppInput";
 import { AppButton } from "../../../../shared/components/AppButton";
+import { Stars } from "./Components/Stars";
 
 export const ReviewBottomSheetView: FC<
   ReturnType<typeof useReviewBottomSheetViewModel>
@@ -22,11 +23,7 @@ export const ReviewBottomSheetView: FC<
         <Text className="font-semibold text-base text-gray-300">Nota</Text>
 
         <View className="flex-row items-center mb-6 gap-2">
-          <Ionicons name="star-outline" size={32} color={colors.grays[400]} />
-          <Ionicons name="star-outline" size={32} color={colors.grays[400]} />
-          <Ionicons name="star-outline" size={32} color={colors.grays[400]} />
-          <Ionicons name="star-outline" size={32} color={colors.grays[400]} />
-          <Ionicons name="star-outline" size={32} color={colors.grays[400]} />
+          <Stars rating={3} />
         </View>
 
         <AppInput
