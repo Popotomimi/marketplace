@@ -5,14 +5,17 @@ import { FC } from "react";
 
 interface StarsParams {
   rating: number;
+  handleRatingChange: (rating: number) => void;
 }
 
-export const Stars: FC<StarsParams> = ({ rating }) => {
+export const Stars: FC<StarsParams> = ({ rating, handleRatingChange }) => {
   return Array.from({ length: 5 }, (_, index) => {
     const starNumber = index + 1;
     const isSelected = starNumber <= rating;
     return (
-      <TouchableOpacity key={index}>
+      <TouchableOpacity
+        onPress={() => handleRatingChange(starNumber)}
+        key={index}>
         <Ionicons
           name={isSelected ? "star" : "star-outline"}
           size={32}
