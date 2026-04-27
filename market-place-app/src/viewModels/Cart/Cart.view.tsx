@@ -9,6 +9,8 @@ import { CartFooter } from "./Components/CartFooter";
 
 export const CartView: FC<ReturnType<typeof useCartViewModel>> = ({
   products,
+  openCartBottonSheet,
+  closeBottomSheet,
 }) => {
   return (
     <SafeAreaView>
@@ -19,7 +21,14 @@ export const CartView: FC<ReturnType<typeof useCartViewModel>> = ({
         keyExtractor={({ id }) => `product-cart-id=${id}`}
         ListEmptyComponent={<EmptyList />}
         ListHeaderComponent={<CartHeader />}
-        ListFooterComponent={products.length > 0 ? <CartFooter /> : null}
+        ListFooterComponent={
+          products.length > 0 ? (
+            <CartFooter
+              openCartBottonSheet={openCartBottonSheet}
+              closeBottomSheet={closeBottomSheet}
+            />
+          ) : null
+        }
       />
     </SafeAreaView>
   );
