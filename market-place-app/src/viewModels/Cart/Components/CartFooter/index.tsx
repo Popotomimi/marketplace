@@ -4,8 +4,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../../styles/colors";
 import { AppButton } from "../../../../shared/components/AppButton";
 import { useCartStore } from "../../../../shared/store/cart-store";
+import { FC } from "react";
 
-export const CartFooter = () => {
+interface CartFooterParams {
+  openCartBottonSheet: () => void;
+  closeBottomSheet: () => void;
+}
+
+export const CartFooter: FC<CartFooterParams> = ({
+  openCartBottonSheet,
+  closeBottomSheet,
+}) => {
   const { total } = useCartStore();
 
   return (
@@ -25,7 +34,9 @@ export const CartFooter = () => {
             CARTÕES DE CRÉDITO
           </Text>
 
-          <TouchableOpacity className="flex-row items-center">
+          <TouchableOpacity
+            onPress={openCartBottonSheet}
+            className="flex-row items-center">
             <Ionicons
               name="card-outline"
               size={20}
