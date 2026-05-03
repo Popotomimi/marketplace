@@ -11,6 +11,8 @@ export const CartView: FC<ReturnType<typeof useCartViewModel>> = ({
   products,
   openCartBottonSheet,
   closeBottomSheet,
+  creditCards,
+  isLoadingCreditCards,
 }) => {
   return (
     <SafeAreaView>
@@ -24,8 +26,10 @@ export const CartView: FC<ReturnType<typeof useCartViewModel>> = ({
         ListFooterComponent={
           products.length > 0 ? (
             <CartFooter
+              isLoadingCreditCards={isLoadingCreditCards}
               openCartBottonSheet={openCartBottonSheet}
               closeBottomSheet={closeBottomSheet}
+              creditCards={creditCards}
             />
           ) : null
         }
