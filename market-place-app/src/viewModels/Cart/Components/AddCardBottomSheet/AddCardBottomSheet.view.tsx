@@ -3,13 +3,17 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useAddCardBottomSheetViewModel } from "./useAddCardBottomSheet.viewModel";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../../styles/colors";
-import { AppInput } from "../../../../shared/components/AppInput";
 import { AppButton } from "../../../../shared/components/AppButton";
 import { AppInputController } from "../../../../shared/components/AppInputController";
 
 export const AddCardBotomSheetView: FC<
   ReturnType<typeof useAddCardBottomSheetViewModel>
-> = ({ handleCreateCreditCard, control }) => {
+> = ({
+  handleCreateCreditCard,
+  control,
+  expirationDateMask,
+  cardNumberMask,
+}) => {
   return (
     <ScrollView>
       <View className="p-8">
@@ -37,6 +41,8 @@ export const AddCardBotomSheetView: FC<
             leftIcon="card-outline"
             label="NÚMERO"
             placeholder="Número do cartão"
+            mask={cardNumberMask}
+            maxLength={19}
           />
 
           <View className="flex-row gap-2">
@@ -49,6 +55,7 @@ export const AddCardBotomSheetView: FC<
                 placeholder="MM/AA"
                 keyboardType="numeric"
                 maxLength={5}
+                mask={expirationDateMask}
               />
             </View>
 
