@@ -8,7 +8,7 @@ import { AppButton } from "../../../../shared/components/AppButton";
 
 export const AddCardBotomSheetView: FC<
   ReturnType<typeof useAddCardBottomSheetViewModel>
-> = () => {
+> = ({ handleCreateCreditCard }) => {
   return (
     <ScrollView>
       <View className="p-8">
