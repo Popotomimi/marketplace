@@ -2,11 +2,37 @@ import { useForm } from "react-hook-form";
 import { useCreateCreditCardMutation } from "../../../../shared/queries/credit-cards/use-create-credit-card.mutation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CreditCardFormData, creditCardSchema } from "./credit-card.schema";
+import { useBottomSheetStore } from "../../../../shared/store/bottomsheet-store";
+
+const formatExpirationDateFormApi = (
+  dateString: string,
+  setError: (message: string) => void,
+): string => {
+  const [month, year] = dateString.split("/").map(Number);
+
+  if (month < 1 || month > 12) {
+    setError("Mês inválido");
+    throw new Error("Mês inválido");
+  }
+
+  if (year < 0 || year > 99) {
+    setError("Ano inválido");
+    throw new Error("Ano inválido");
+  }
+
+  const fullYear = 2000 + year;
+
+  const expirationDate = new Date(fullYear, month, 0);
+
+  const isoDate = expirationDate.toISOString().split("T")[0];
+
+  return isoDate;
+};
 
 export const useAddCardBottomSheetViewModel = () => {
   const createCreditCardMutation = useCreateCreditCardMutation();
 
-  const { control, handleSubmit, reset, watch, clearErrors } =
+  const { control, handleSubmit, reset, watch, clearErrors, setError } =
     useForm<CreditCardFormData>({
       resolver: yupResolver(creditCardSchema),
       defaultValues: {
@@ -17,13 +43,25 @@ export const useAddCardBottomSheetViewModel = () => {
       },
     });
 
-  const handleCreateCreditCard = () => {
-    createCreditCardMutation.mutate({
-      CVV: 123,
-      expirationDate: "",
-      number: "",
-    });
-  };
+  const { close: closeBottomSheet } = useBottomSheetStore();
+
+  const handleCreateCreditCard = handleSubmit(
+    async ({ CVV, expirationDate: rawExpirationDate, number }) => {
+      const expirationDate = formatExpirationDateFormApi(
+        rawExpirationDate,
+        (message) => setError("expirationDate", { message }),
+      );
+      const cleanedNumber = number.replace(/\s/g, "");
+
+      await createCreditCardMutation.mutateAsync({
+        CVV: Number(CVV),
+        expirationDate,
+        number: cleanedNumber,
+      });
+
+      closeBottomSheet();
+    },
+  );
 
   const expirationDateMask = (value: string) => {
     const cleaned = value.replace(/\D/g, "");
