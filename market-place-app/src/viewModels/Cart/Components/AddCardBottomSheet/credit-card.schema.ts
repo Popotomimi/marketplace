@@ -20,7 +20,7 @@ export const creditCardSchema = yup.object().shape({
   expirationDate: yup
     .string()
     .required("Data de vencimento é obirgatória")
-    .matches(/^d{2}\/d{2}$/, "Formato deve ser MM/AA"),
+    .matches(/^\d{2}\/\d{2}$/, "Formato deve ser MM/AA"),
 
   CVV: yup
     .string()

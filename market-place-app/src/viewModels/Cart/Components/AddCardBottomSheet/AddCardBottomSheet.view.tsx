@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../../styles/colors";
 import { AppButton } from "../../../../shared/components/AppButton";
 import { AppInputController } from "../../../../shared/components/AppInputController";
+import { useBottomSheetStore } from "../../../../shared/store/bottomsheet-store";
 
 export const AddCardBotomSheetView: FC<
   ReturnType<typeof useAddCardBottomSheetViewModel>
@@ -14,6 +15,8 @@ export const AddCardBotomSheetView: FC<
   expirationDateMask,
   cardNumberMask,
 }) => {
+  const { close: closeBottomSheet } = useBottomSheetStore();
+
   return (
     <ScrollView>
       <View className="p-8">
@@ -21,7 +24,9 @@ export const AddCardBotomSheetView: FC<
           <Text className="font-bold text-2xl text-center text-gray-900">
             Adicionar Cartão
           </Text>
-          <TouchableOpacity className="w-8 items-center justify-center border border-gray-400 rounded-[10px]">
+          <TouchableOpacity
+            onPress={closeBottomSheet}
+            className="w-8 items-center justify-center border border-gray-400 rounded-[10px]">
             <Ionicons name="close" size={24} color={colors.grays[400]} />
           </TouchableOpacity>
         </View>
@@ -74,11 +79,13 @@ export const AddCardBotomSheetView: FC<
 
         <View className="flex-row gap-4 pb-5 mt-8">
           <View className="flex-1">
-            <AppButton variant="outlined">Cancelar</AppButton>
+            <AppButton onPress={closeBottomSheet} variant="outlined">
+              Cancelar
+            </AppButton>
           </View>
 
           <View className="flex-1">
-            <AppButton>Salvar</AppButton>
+            <AppButton onPress={handleCreateCreditCard}>Salvar</AppButton>
           </View>
         </View>
       </View>
