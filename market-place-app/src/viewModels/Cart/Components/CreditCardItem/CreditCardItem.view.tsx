@@ -4,12 +4,24 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../../../styles/colors";
 import { FC } from "react";
 import { useCreditCardItemViewModel } from "./useCreditCardItem.viewModel";
+import { CreditCard } from "../../../../shared/interfaces/credit-card";
 
 export const CreditCardItemView: FC<
-  ReturnType<typeof useCreditCardItemViewModel>
-> = ({ creditCard, formatedExpirationDate, formatedCardNumber }) => {
+  ReturnType<typeof useCreditCardItemViewModel> & {
+    isSelected: boolean;
+    setSelectedCreditCard: (creditCard: CreditCard) => void;
+  }
+> = ({
+  creditCard,
+  formatedExpirationDate,
+  formatedCardNumber,
+  isSelected,
+  setSelectedCreditCard,
+}) => {
   return (
-    <TouchableOpacity className="p-4 rounded-lg border-[1px] bg-white border-gray-100">
+    <TouchableOpacity
+      className={`p-4 rounded-lg border-[1px] bg-white ${isSelected ? "border-purple-base" : "border-gray-100"}`}
+      onPress={() => setSelectedCreditCard(creditCard)}>
       <View className="flex-row justify-between">
         <View className="mr-4">
           <Ionicons

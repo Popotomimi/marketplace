@@ -5,10 +5,22 @@ import { useCreditCardItemViewModel } from "./useCreditCardItem.viewModel";
 
 interface CreditCardItemParams {
   creditCard: CreditCard;
+  isSelected: boolean;
+  setSelectedCreditCard: (creditCard: CreditCard) => void;
 }
 
-export const CreditCardItem: FC<CreditCardItemParams> = ({ creditCard }) => {
+export const CreditCardItem: FC<CreditCardItemParams> = ({
+  creditCard,
+  isSelected,
+  setSelectedCreditCard,
+}) => {
   const viewModel = useCreditCardItemViewModel(creditCard);
 
-  return <CreditCardItemView {...viewModel} />;
+  return (
+    <CreditCardItemView
+      {...viewModel}
+      isSelected={isSelected}
+      setSelectedCreditCard={setSelectedCreditCard}
+    />
+  );
 };
