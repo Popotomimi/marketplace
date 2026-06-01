@@ -3,7 +3,7 @@ export interface SubmitOrdersRequestParamsInterface {
   items: {
     productId: number;
     quantity: number;
-  };
+  }[];
 }
 
 export interface SubmitOrderResponse {
