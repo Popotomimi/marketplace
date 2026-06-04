@@ -5,6 +5,7 @@ import { KeyboardContainer } from "../../shared/components/KeyboardContainer";
 import { Ionicons } from "@expo/vector-icons";
 import { AppInputController } from "../../shared/components/AppInputController";
 import { AppButton } from "../../shared/components/AppButton";
+import { Header } from "./components/Header";
 
 export const ProfileView: FC<ReturnType<typeof useProfileViewModel>> = ({
   avatarUri,
@@ -14,7 +15,8 @@ export const ProfileView: FC<ReturnType<typeof useProfileViewModel>> = ({
   return (
     <KeyboardContainer>
       <ScrollView className="flex-1 px-[40px]">
-        <TouchableOpacity className="w-[120px] h-[120px] rounded-xl items-center justify-center bg-shape self-center mb-8">
+        <Header />
+        <TouchableOpacity className="w-[120px] h-[120px] rounded-xl items-center justify-center bg-shape self-center mb-8 mt-6">
           {avatarUri ? (
             <Image
               source={{ uri: avatarUri }}
@@ -25,6 +27,11 @@ export const ProfileView: FC<ReturnType<typeof useProfileViewModel>> = ({
             <Ionicons name="cloud-upload-outline" size={32} />
           )}
         </TouchableOpacity>
+
+        <Text className="text-base mt-6 font-bold text-gray-500">
+          Dados Pessoais
+        </Text>
+
         <AppInputController
           leftIcon="person-outline"
           label="NOME"
