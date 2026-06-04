@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { ProfileFormData, profileSchema } from "./profile.schema";
 import { useState } from "react";
 import { useUserStore } from "../../shared/store/user-store";
+import { useUpdateProfileMutation } from "../../shared/queries/profile/use-update-profile.mutation";
 
 export const useProfileViewModel = () => {
   const { user } = useUserStore();
@@ -10,10 +11,12 @@ export const useProfileViewModel = () => {
     user?.avatarUrl || null,
   );
 
+  const updateProfileMutation = useUpdateProfileMutation();
+
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ProfileFormData>({
     resolver: yupResolver(profileSchema),
     defaultValues: {
@@ -25,7 +28,24 @@ export const useProfileViewModel = () => {
     },
   });
 
-  const onSubmit = handleSubmit(async () => {});
+  const validatePasswords = (userData: ProfileFormData) => {
+    if (!userData.password) return true;
+
+    if (
+      userData.password === userData.newPassword &&
+      userData?.password?.length > 0
+    ) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const onSubmit = handleSubmit(async (userData) => {
+    if (!validatePasswords(userData)) return;
+
+    await updateProfileMutation.mutateAsync(userData);
+  });
 
   return {
     control,
@@ -33,5 +53,6 @@ export const useProfileViewModel = () => {
     formState: { errors },
     onSubmit,
     avatarUri,
+    isSubmitting,
   };
 };
