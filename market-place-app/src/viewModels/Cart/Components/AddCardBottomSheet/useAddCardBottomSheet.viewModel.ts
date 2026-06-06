@@ -3,6 +3,9 @@ import { useCreateCreditCardMutation } from "../../../../shared/queries/credit-c
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CreditCardFormData, creditCardSchema } from "./credit-card.schema";
 import { useBottomSheetStore } from "../../../../shared/store/bottomsheet-store";
+import { useRef, useState } from "react";
+
+export type FocusedField = "number" | "name" | "expiry" | "cvv";
 
 const formatExpirationDateFormApi = (
   dateString: string,
@@ -31,6 +34,9 @@ const formatExpirationDateFormApi = (
 
 export const useAddCardBottomSheetViewModel = () => {
   const createCreditCardMutation = useCreateCreditCardMutation();
+  const [focusedField, setFocusedField] = useState<FocusedField | null>(null);
+
+  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { control, handleSubmit, reset, watch, clearErrors, setError } =
     useForm<CreditCardFormData>({
@@ -85,10 +91,30 @@ export const useAddCardBottomSheetViewModel = () => {
     return cleaned.replace(/(\d{4})(?=\d)/g, "$1").trim();
   };
 
+  const handleFieldFocus = (field: FocusedField) => {
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+    }
+
+    setFocusedField(field);
+  };
+
+  const handleFieldBlur = () => {
+    blurTimeoutRef.current = setTimeout(() => {
+      setFocusedField(null);
+    }, 50);
+  };
+
+  const isFlipped = focusedField === "cvv";
+
   return {
     handleCreateCreditCard,
     control,
     expirationDateMask,
     cardNumberMask,
+    isFlipped,
+    handleFieldFocus,
+    handleFieldBlur,
+    focusedField,
   };
 };
