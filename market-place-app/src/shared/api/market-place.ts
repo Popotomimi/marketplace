@@ -47,7 +47,7 @@ export class MarketPlaceApiClient {
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
 
     this.instance.interceptors.response.use(
@@ -81,7 +81,7 @@ export class MarketPlaceApiClient {
               "/auth/refresh",
               {
                 refreshToken,
-              }
+              },
             );
 
             const currentUserData = JSON.parse(userData);
@@ -91,7 +91,7 @@ export class MarketPlaceApiClient {
 
             await AsyncStorage.setItem(
               "marketplace-auth",
-              JSON.stringify(currentUserData)
+              JSON.stringify(currentUserData),
             );
 
             originalRequest.headers.Authorization = `Bearer ${response.token}`;
@@ -100,7 +100,7 @@ export class MarketPlaceApiClient {
           } catch (error) {
             this.handleUnauthorized();
             return Promise.reject(
-              new Error("Sessão expirada. Faça login novamente.")
+              new Error("Sessão expirada. Faça login novamente."),
             );
           } finally {
             this.isRefreshing = false;
@@ -108,11 +108,13 @@ export class MarketPlaceApiClient {
         }
 
         if (error.response && error.response.data) {
-          return Promise.reject(new Error(error.response.data.message));
+          const message =
+            error.response.data.message || error.response.data.error;
+          return Promise.reject(new Error(message || "Falha na requisição"));
         } else {
           return Promise.reject(new Error("Falha na requisição"));
         }
-      }
+      },
     );
   }
 

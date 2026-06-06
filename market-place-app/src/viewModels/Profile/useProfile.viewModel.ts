@@ -7,17 +7,33 @@ import { useUpdateProfileMutation } from "../../shared/queries/profile/use-updat
 import { useAppModal } from "../../shared/hooks/useAppModal";
 import { useModalStore } from "../../shared/store/modal-store";
 import { useCartStore } from "../../shared/store/cart-store";
+import { useImage } from "../../shared/hooks/useImage";
+import { CameraType } from "expo-image-picker";
+import { useUploadAvatarMutation } from "../../shared/queries/auth/use-upload-avatar.mutation";
 
 export const useProfileViewModel = () => {
   const { user, logout } = useUserStore();
-  const [avatarUri, setAvatarUri] = useState<string | null>(
-    user?.avatarUrl || null,
-  );
 
   const updateProfileMutation = useUpdateProfileMutation();
   const { showSelection } = useAppModal();
   const { close } = useModalStore();
   const { clearCart } = useCartStore();
+
+  const uploadAvatarMutation = useUploadAvatarMutation();
+
+  const { handleSelectImage } = useImage({
+    callback: async (url) => {
+      if (url) {
+        try {
+          await uploadAvatarMutation.mutateAsync(url);
+        } catch (error) {
+          // O Toast já mostra a mensagem, mas evitamos rejection não tratado.
+          console.error("Erro ao enviar avatar:", error);
+        }
+      }
+    },
+    cameraType: CameraType.front,
+  });
 
   const {
     control,
@@ -68,6 +84,7 @@ export const useProfileViewModel = () => {
           onPress: () => {
             clearCart();
             logout();
+            close();
           },
           text: "Sair",
         },
@@ -80,8 +97,9 @@ export const useProfileViewModel = () => {
     handleSubmit,
     formState: { errors },
     onSubmit,
-    avatarUri,
+    avatarUri: user?.avatarUrl,
     isSubmitting,
     handleLogout,
+    handleSelectImage,
   };
 };
