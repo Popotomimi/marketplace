@@ -7,7 +7,7 @@ import { UploadAvatarResponse } from "../interfaces/http/upload-avatar";
 export const register = async (userData: RegisterHttpParams) => {
   const { data } = await marketPlaceApiClient.post<AuthResponse>(
     "/auth/register",
-    userData
+    userData,
   );
 
   return data;
@@ -16,7 +16,7 @@ export const register = async (userData: RegisterHttpParams) => {
 export const login = async (userData: LoginHttpParams) => {
   const { data } = await marketPlaceApiClient.post<AuthResponse>(
     "/auth/login",
-    userData
+    userData,
   );
 
   return data;
@@ -29,11 +29,11 @@ export const uploadAvatar = async (avatarUri: string) => {
     uri: avatarUri,
     type: "image/jpeg",
     name: "avatar.jpeg",
-  } as unknown as Blob);
+  } as any);
 
   const { data } = await marketPlaceApiClient.post<UploadAvatarResponse>(
     "/user/avatar",
-    formData
+    formData,
   );
 
   data.url = `${baseURL}${data.url}`;
