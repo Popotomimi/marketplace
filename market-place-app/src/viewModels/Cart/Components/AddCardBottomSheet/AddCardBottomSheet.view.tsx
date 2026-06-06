@@ -15,6 +15,10 @@ export const AddCardBotomSheetView: FC<
   control,
   expirationDateMask,
   cardNumberMask,
+  handleFieldBlur,
+  handleFieldFocus,
+  isFlipped,
+  focusedField,
 }) => {
   const { close: closeBottomSheet } = useBottomSheetStore();
 
@@ -32,7 +36,7 @@ export const AddCardBotomSheetView: FC<
           </TouchableOpacity>
         </View>
 
-        <CreditCard />
+        <CreditCard focusedField={focusedField} isFlipped={isFlipped} />
 
         <View className="mt-6 gap-4">
           <AppInputController
@@ -41,6 +45,8 @@ export const AddCardBotomSheetView: FC<
             leftIcon="person-outline"
             label="NOME DO TITULAR"
             placeholder="Nome Completo"
+            onFocus={() => handleFieldFocus("name")}
+            onBlur={handleFieldBlur}
           />
 
           <AppInputController
@@ -51,6 +57,8 @@ export const AddCardBotomSheetView: FC<
             placeholder="Número do cartão"
             mask={cardNumberMask}
             maxLength={19}
+            onFocus={() => handleFieldFocus("number")}
+            onBlur={handleFieldBlur}
           />
 
           <View className="flex-row gap-2">
@@ -64,6 +72,8 @@ export const AddCardBotomSheetView: FC<
                 keyboardType="numeric"
                 maxLength={5}
                 mask={expirationDateMask}
+                onFocus={() => handleFieldFocus("expiry")}
+                onBlur={handleFieldBlur}
               />
             </View>
 
@@ -75,6 +85,8 @@ export const AddCardBotomSheetView: FC<
                 label="CVV"
                 placeholder="000"
                 keyboardType="numeric"
+                onFocus={() => handleFieldFocus("cvv")}
+                onBlur={handleFieldBlur}
               />
             </View>
           </View>
