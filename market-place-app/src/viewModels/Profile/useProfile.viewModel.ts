@@ -4,14 +4,20 @@ import { ProfileFormData, profileSchema } from "./profile.schema";
 import { useState } from "react";
 import { useUserStore } from "../../shared/store/user-store";
 import { useUpdateProfileMutation } from "../../shared/queries/profile/use-update-profile.mutation";
+import { useAppModal } from "../../shared/hooks/useAppModal";
+import { useModalStore } from "../../shared/store/modal-store";
+import { useCartStore } from "../../shared/store/cart-store";
 
 export const useProfileViewModel = () => {
-  const { user } = useUserStore();
+  const { user, logout } = useUserStore();
   const [avatarUri, setAvatarUri] = useState<string | null>(
     user?.avatarUrl || null,
   );
 
   const updateProfileMutation = useUpdateProfileMutation();
+  const { showSelection } = useAppModal();
+  const { close } = useModalStore();
+  const { clearCart } = useCartStore();
 
   const {
     control,
@@ -47,6 +53,28 @@ export const useProfileViewModel = () => {
     await updateProfileMutation.mutateAsync(userData);
   });
 
+  const handleLogout = () => {
+    showSelection({
+      title: "Sair",
+      message: "Tem certeza que deseja sair da sua conta?",
+      options: [
+        {
+          text: "Continuar Logado",
+          onPress: close,
+          variant: "secondary",
+        },
+        {
+          variant: "danger",
+          onPress: () => {
+            clearCart();
+            logout();
+          },
+          text: "Sair",
+        },
+      ],
+    });
+  };
+
   return {
     control,
     handleSubmit,
@@ -54,5 +82,6 @@ export const useProfileViewModel = () => {
     onSubmit,
     avatarUri,
     isSubmitting,
+    handleLogout,
   };
 };

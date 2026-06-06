@@ -23,7 +23,7 @@ export const SelectionModal: FC<SelectionModalProps> = ({
         "bg-danger": variant === "danger",
         "bg-blue-dark": variant === "secondary",
         "bg-purple-base": variant === "primary",
-      }
+      },
     );
 
   return (
@@ -32,7 +32,7 @@ export const SelectionModal: FC<SelectionModalProps> = ({
         <Text className="text-lg font-bold text-gray-900 mb-3">{title}</Text>
 
         {message && (
-          <Text className="text-base text-gray-600 mb-6 leading-6">
+          <Text className="text-base text-gray-600 mb-6 leading-6 text-center">
             {message}
           </Text>
         )}
