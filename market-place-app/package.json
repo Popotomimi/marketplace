@@ -21,6 +21,7 @@
     "expo-checkbox": "~5.0.8",
     "expo-constants": "~18.0.10",
     "expo-image-picker": "~17.0.9",
+    "expo-linear-gradient": "~15.0.8",
     "expo-linking": "~8.0.9",
     "expo-router": "~6.0.15",
     "expo-status-bar": "~3.0.8",
