@@ -17,16 +17,19 @@ export const CreditCardView: FC<
   ReturnType<typeof useCreditCardViewModel> & {
     focusedField: FocusedField | null;
   }
-> = ({ focusedField }) => {
+> = ({ focusedField, backAnimatedStyle, frontAnimatedStyle }) => {
   return (
     <View className="h-[192px]">
       <Animated.View
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: 192,
-          backfaceVisibility: "hidden",
-        }}>
+        style={[
+          frontAnimatedStyle,
+          {
+            position: "absolute",
+            width: "100%",
+            height: 192,
+            backfaceVisibility: "hidden",
+          },
+        ]}>
         <LinearGradient
           colors={PURPLE_GRADIENT}
           start={{ x: 0, y: 0.5 }}
@@ -75,12 +78,15 @@ export const CreditCardView: FC<
       </Animated.View>
 
       <Animated.View
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: 192,
-          backfaceVisibility: "hidden",
-        }}>
+        style={[
+          backAnimatedStyle,
+          {
+            position: "absolute",
+            width: "100%",
+            height: 192,
+            backfaceVisibility: "hidden",
+          },
+        ]}>
         <LinearGradient
           colors={PURPLE_GRADIENT}
           start={{ x: 0, y: 0.5 }}
