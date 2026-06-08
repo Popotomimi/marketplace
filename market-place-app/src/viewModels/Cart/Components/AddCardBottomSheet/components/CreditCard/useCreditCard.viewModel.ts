@@ -25,11 +25,18 @@ export const useCreditCardViewModel = (isFlipped: boolean) => {
     };
   });
 
+  const formatCardNumber = (cardNumber: string) => {
+    const cleaned = cardNumber.replace(/\s/g, "");
+    const padded = cleaned.padEnd(16, "•");
+
+    return padded.match(/.{1,4}/g)?.join(" ") || "•••• •••• •••• ••••";
+  };
+
   useEffect(() => {
     flipValue.value = withTiming(isFlipped ? 1 : 0, {
       duration: 600,
     });
   }, [isFlipped]);
 
-  return { frontAnimatedStyle, backAnimatedStyle };
+  return { frontAnimatedStyle, backAnimatedStyle, formatCardNumber };
 };
